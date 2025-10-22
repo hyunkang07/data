@@ -29,6 +29,72 @@ weather_icons = {
     "Haze": "🌫️"
 }
 
+# 한글-영문 도시명 매핑
+city_name_map = {
+    # 한국 주요 도시
+    "서울": "Seoul",
+    "부산": "Busan",
+    "인천": "Incheon",
+    "대구": "Daegu",
+    "대전": "Daejeon",
+    "광주": "Gwangju",
+    "울산": "Ulsan",
+    "수원": "Suwon",
+    "창원": "Changwon",
+    "성남": "Seongnam",
+    "용인": "Yongin",
+    "고양": "Goyang",
+    "청주": "Cheongju",
+    "전주": "Jeonju",
+    "천안": "Cheonan",
+    "안산": "Ansan",
+    "제주": "Jeju",
+    "포항": "Pohang",
+    "춘천": "Chuncheon",
+    "강릉": "Gangneung",
+    
+    # 세계 주요 도시
+    "도쿄": "Tokyo",
+    "오사카": "Osaka",
+    "교토": "Kyoto",
+    "베이징": "Beijing",
+    "상하이": "Shanghai",
+    "홍콩": "Hong Kong",
+    "타이베이": "Taipei",
+    "방콕": "Bangkok",
+    "싱가포르": "Singapore",
+    "뉴욕": "New York",
+    "로스앤젤레스": "Los Angeles",
+    "LA": "Los Angeles",
+    "샌프란시스코": "San Francisco",
+    "시카고": "Chicago",
+    "런던": "London",
+    "파리": "Paris",
+    "로마": "Rome",
+    "베를린": "Berlin",
+    "마드리드": "Madrid",
+    "바르셀로나": "Barcelona",
+    "시드니": "Sydney",
+    "멜버른": "Melbourne",
+    "두바이": "Dubai",
+    "모스크바": "Moscow"
+}
+
+def convert_city_name(city_input):
+    """한글 도시명을 영문으로 변환합니다."""
+    if not city_input:
+        return None
+    
+    # 입력값을 정리 (앞뒤 공백 제거)
+    city_input = city_input.strip()
+    
+    # 한글-영문 매핑 딕셔너리에서 찾기
+    if city_input in city_name_map:
+        return city_name_map[city_input]
+    
+    # 매핑에 없으면 입력값 그대로 반환 (영문 도시명일 경우)
+    return city_input
+
 def get_weather_data(city_name):
     """OpenWeather API를 통해 현재 날씨 데이터를 가져옵니다."""
     try:
@@ -153,10 +219,6 @@ def display_weather(weather_data):
         
         with col5:
             st.info(f"**기압:** {pressure} hPa")
-        
-        # 상세 정보 (접을 수 있는 형태)
-        with st.expander("📊 상세 정보 보기"):
-            st.json(weather_data)
 
 def display_weekly_forecast(forecast_data):
     """주간 날씨 예보를 표시합니다."""
@@ -208,60 +270,6 @@ def display_weekly_forecast(forecast_data):
             </div>
             """, unsafe_allow_html=True)
     
-    # 상세 정보 테이블
-    st.markdown("---")
-    st.markdown("### 📊 상세 주간 예보")
-    
-    # HTML 테이블로 표시
-    day_name_kr = {
-        'Monday': '월요일',
-        'Tuesday': '화요일',
-        'Wednesday': '수요일',
-        'Thursday': '목요일',
-        'Friday': '금요일',
-        'Saturday': '토요일',
-        'Sunday': '일요일'
-    }
-    
-    # HTML 테이블 생성
-    table_html = """
-    <table style='width: 100%; border-collapse: collapse; margin: 20px 0;'>
-        <thead>
-            <tr style='background-color: #f0f2f6;'>
-                <th style='padding: 12px; text-align: left; border: 1px solid #ddd;'>날짜</th>
-                <th style='padding: 12px; text-align: left; border: 1px solid #ddd;'>요일</th>
-                <th style='padding: 12px; text-align: left; border: 1px solid #ddd;'>날씨</th>
-                <th style='padding: 12px; text-align: center; border: 1px solid #ddd;'>최고온도</th>
-                <th style='padding: 12px; text-align: center; border: 1px solid #ddd;'>최저온도</th>
-                <th style='padding: 12px; text-align: center; border: 1px solid #ddd;'>평균습도</th>
-                <th style='padding: 12px; text-align: center; border: 1px solid #ddd;'>평균풍속</th>
-            </tr>
-        </thead>
-        <tbody>
-    """
-    
-    for day_data in daily_forecast:
-        day_kr = day_name_kr.get(day_data['day_name'], day_data['day_name'])
-        icon = weather_icons.get(day_data['weather'], "🌍")
-        
-        table_html += f"""
-            <tr style='border: 1px solid #ddd;'>
-                <td style='padding: 10px; border: 1px solid #ddd;'>{day_data['date'].strftime('%Y-%m-%d')}</td>
-                <td style='padding: 10px; border: 1px solid #ddd;'>{day_kr}</td>
-                <td style='padding: 10px; border: 1px solid #ddd;'>{icon} {day_data['description']}</td>
-                <td style='padding: 10px; text-align: center; border: 1px solid #ddd;'>{day_data['temp_max']:.1f}°C</td>
-                <td style='padding: 10px; text-align: center; border: 1px solid #ddd;'>{day_data['temp_min']:.1f}°C</td>
-                <td style='padding: 10px; text-align: center; border: 1px solid #ddd;'>{day_data['humidity']:.0f}%</td>
-                <td style='padding: 10px; text-align: center; border: 1px solid #ddd;'>{day_data['wind_speed']:.1f} m/s</td>
-            </tr>
-        """
-    
-    table_html += """
-        </tbody>
-    </table>
-    """
-    
-    st.markdown(table_html, unsafe_allow_html=True)
 
 def main():
     """메인 애플리케이션"""
