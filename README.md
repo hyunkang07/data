@@ -57,3 +57,79 @@ streamlit run app.py
 ## 🔗 API 출처
 
 [OpenWeather API](https://openweathermap.org/api)
+
+---
+
+## 🚀 Streamlit Cloud 배포 방법
+
+### 1. GitHub 저장소 준비
+
+1. GitHub에 새 저장소를 만듭니다
+2. 프로젝트 파일들을 push 합니다:
+
+```bash
+git init
+git add .
+git commit -m "날씨 앱 초기 커밋"
+git branch -M main
+git remote add origin <your-github-repo-url>
+git push -u origin main
+```
+
+### 2. Streamlit Cloud 배포
+
+1. [share.streamlit.io](https://share.streamlit.io)에 접속합니다
+2. GitHub 계정으로 로그인합니다
+3. "New app" 버튼을 클릭합니다
+4. 다음 정보를 입력합니다:
+   - **Repository**: 생성한 GitHub 저장소 선택
+   - **Branch**: main
+   - **Main file path**: app.py
+5. "Deploy!" 버튼을 클릭합니다
+
+### 3. 배포 완료
+
+몇 분 후 앱이 배포되고 공개 URL이 생성됩니다!
+
+## 📦 배포에 필요한 파일
+
+배포를 위해 다음 파일들이 준비되어 있습니다:
+
+- ✅ `app.py` - 메인 애플리케이션
+- ✅ `requirements.txt` - Python 패키지 의존성
+- ✅ `.streamlit/config.toml` - Streamlit 설정 (테마, 서버 설정)
+- ✅ `packages.txt` - 시스템 레벨 패키지 (필요시)
+- ✅ `.gitignore` - Git 제외 파일
+- ✅ `README.md` - 프로젝트 문서
+
+## ⚙️ 환경 변수 설정 (선택사항)
+
+보안을 위해 API 키를 환경 변수로 관리하려면:
+
+1. Streamlit Cloud 대시보드에서 앱 설정으로 이동
+2. "Secrets" 섹션에서 다음을 추가:
+
+```toml
+API_KEY = "4420348db0f68ca32ed864b0702fd5a0"
+```
+
+3. `app.py`에서 다음과 같이 수정:
+
+```python
+import streamlit as st
+
+# API 키
+API_KEY = st.secrets.get("API_KEY", "4420348db0f68ca32ed864b0702fd5a0")
+```
+
+## 🔄 업데이트 방법
+
+앱을 수정한 후:
+
+```bash
+git add .
+git commit -m "업데이트 설명"
+git push
+```
+
+Streamlit Cloud가 자동으로 새 버전을 배포합니다!

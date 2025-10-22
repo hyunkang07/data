@@ -24,7 +24,8 @@ wheels/
 *.egg
 
 # Streamlit
-.streamlit/
+.streamlit/secrets.toml
+.streamlit/*_cache/
 
 # IDE
 .vscode/
